@@ -9,7 +9,9 @@ function is_ssh_session() {
 
 # Check if inside a Docker container
 function is_docker_container() {
-  if [ -f /.dockerenv ] || [ -f /run/.containerenv ] || grep -qE "(docker|lxc)" /proc/1/mountinfo 2>/dev/null; then
+  if [ -f /.dockerenv ] || [ -f /run/.containerenv ]; then
+    echo "%F{86}docker%f "  # Light blue (86) for Docker indicator
+  elif grep -qE '(docker|containerd)' /proc/1/cgroup 2>/dev/null; then
     echo "%F{86}docker%f "  # Light blue (86) for Docker indicator
   fi
 }
