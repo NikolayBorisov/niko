@@ -1,5 +1,7 @@
 # Niko Oh My Zsh Theme
 
+<img src="https://raw.githubusercontent.com/NikolayBorisov/niko/main/screenshot.png">
+
 ## Installation
 ### oh-my-zsh
 ```bash
