@@ -2,15 +2,15 @@
 
 function is_ssh_session() {
   if [ -n "$SSH_CONNECTION" ]; then
-    echo "%F{213}ssh%f " # Light pink (213) for SSH indicator
+    echo "%F{86}ssh%f " # Light blue (86) for SSH indicator
   fi
 }
 
 function is_docker_container() {
   if [ -f /.dockerenv ] || [ -f /run/.containerenv ]; then
-    echo "%F{86}docker%f " # Light blue (86) for Docker indicator
+    echo "%F{27}docker%f " # Purple (27) for Docker indicator
   elif grep -qE '(docker|containerd)' /proc/1/cgroup 2>/dev/null; then
-    echo "%F{86}docker%f " # Light blue (86) for Docker indicator
+    echo "%F{27}docker%f " # Purple (27) for Docker indicator
   fi
 }
 
@@ -30,7 +30,7 @@ function context() {
   if [[ $UID -eq 0 ]]; then
     echo "%B%F{196}%n%f%b@%F{208}%m%f " # Bold red (196) for root, orange (208) for hostname
   else
-    echo "%F{45}%n%f@%F{208}%m%f " # Cyan (45) for normal user, orange (208) for hostname
+    echo "%F{170}%n%f@%F{208}%m%f " # Fucsia (170) for normal user, orange (208) for hostname
   fi
 }
 
@@ -51,7 +51,7 @@ function format_path() {
 
 function is_failed() {
   if [ -n "$ELAPSED_TIME" ] && [[ $LAST_STATUS -ne 0 ]]; then
-    echo "%B%F{196}Exit $LAST_STATUS%f%b "
+    echo "%B%F{196}exit $LAST_STATUS%f%b "
   fi
 }
 
@@ -70,7 +70,7 @@ function execution_time() {
     ((milliseconds > 0)) && time_output+="${milliseconds}ms"
 
     if [ -n "$time_output" ]; then
-      echo "%F{222}⏱ ${time_output}%f " # Yellow (222) for elapsed time
+      echo "%F{235}${time_output}%f " # Grey (235) for elapsed time
     fi
   fi
 }
@@ -96,13 +96,13 @@ add-zsh-hook preexec preexec_fn
 add-zsh-hook precmd precmd_fn
 
 function prompt_command() {
-  local prompt="$(is_failed)$(execution_time)"
+  local prompt="$(execution_time)$(is_failed)"
 
   if [ -n "$prompt" ]; then
-    prompt+=$'\n\n'
+    prompt+="\n"
   fi
 
-  prompt+="$(is_ssh_session)$(is_docker_container)"
+  prompt+="\n$(is_ssh_session)$(is_docker_container)"
   prompt+="$(context)"
   prompt+="$(check_dir_access)$(format_path)"
 
